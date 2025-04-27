@@ -1,0 +1,205 @@
+/* General Styles (Mantener igual) */
+body {
+    font-family: 'Arial', sans-serif;
+    /* Fondo vibrante (puedes experimentar con otros degradados) */
+    background: linear-gradient(to right, #ff7e5f, #feb47b); /* Ejemplo: Coral a Naranja */
+    /* Otros ejemplos: linear-gradient(to right, #6dd5ed, #2193b0); Azul
+                       linear-gradient(to right, #83a4d4, #bdc3c7); Azul grisáceo
+                       linear-gradient(to right, #fc5c7d, #6a82fb); Rosa a Azul */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    color: #333; /* Color de texto por defecto */
+    line-height: 1.5; /* Mejorar legibilidad */
+}
+
+header {
+    background-color: rgba(52, 152, 219, 0.9); /* Color azul semi-transparente */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1;
+}
+
+main {
+    padding: 20px;
+    width: 90%;
+    max-width: 1200px;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Alinear al inicio */
+}
+
+/* Quiz Container (Mantener igual) */
+.quiz-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px; /* Espacio entre las tarjetas */
+    width: 100%;
+}
+
+/* Card Container (Mantener igual) */
+.card-container {
+    width: 300px; /* Ancho fijo */
+    height: auto;
+    perspective: 1000px;
+    box-sizing: border-box;
+}
+
+/* Card (Mantener igual) */
+.card {
+    width: 100%;
+    height: auto;
+    position: relative;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+.card-container:not(.disabled) .card {
+    cursor: pointer;
+}
+
+.card.flipped {
+    transform: rotateY(180deg);
+}
+
+/* Card Faces (Mantener igual, excepto por los estilos de scrollbar que ya quitamos) */
+.card-front,
+.card-back {
+    width: 100%;
+    backface-visibility: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.card-front {
+    position: relative;
+    background-color: #fff;
+    color: #333;
+    font-size: 16px;
+    text-align: left;
+    justify-content: flex-start;
+    min-height: 180px;
+}
+
+.card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #eee;
+    color: #333;
+    font-size: 14px;
+    transform: rotateY(180deg);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* Answer Feedback (Mantener igual) */
+.feedback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.correct {
+    background-color: rgba(0, 128, 0, 0.8);
+    color: white;
+}
+
+.incorrect {
+    background-color: rgba(200, 0, 0, 0.8);
+    color: white;
+}
+
+.feedback p {
+    padding: 10px 0;
+    font-size: 16px;
+    font-weight: normal;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* Answer Options (Mantener igual) */
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 15px;
+    width: 100%;
+    flex-grow: 1;
+}
+
+.answer-option {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+    font-size: 14px;
+}
+
+.answer-option:hover:not(.selected) {
+    background-color: #ddd;
+}
+
+.answer-option.selected {
+    background-color: #cce5ff;
+    border-color: #99ccff;
+    font-weight: bold;
+}
+
+/* Disabled Card Styles */
+
+/* Rule for pointer-events and cursor - applies to ANY disabled container */
+.card-container.disabled {
+    pointer-events: none; /* Evita clics en toda la tarjeta */
+    cursor: not-allowed;
+}
+
+/* >>>>>>>>>> MODIFICADO: Aplicar opacidad SÓLO si el contenedor está deshabilitado Y la tarjeta NO está volteada <<<<<<<<<< */
+.card-container.disabled .card:not(.flipped) {
+    opacity: 0.6; /* Hace traslúcida la tarjeta */
+}
+
+/* Optional: Estilo visual para opciones en tarjetas deshabilitadas */
+/* Esto se aplica tanto a tarjetas bloqueadas por fase como a las respondidas correctamente */
+.card-container.disabled .answer-option {
+    background-color: #e0e0e0;
+    /* cursor: not-allowed; - Ya lo tiene el contenedor padre */
+}
+
+/* >>>>>>>>>> AÑADIDO: Asegurar que las opciones en tarjetas RESPONDIDAS CORRECTAMENTE no se vean como 'seleccionadas' deshabilitadas <<<<<<<<<< */
+/* Esto puede ser opcional, dependiendo de si quieres que la opción correcta seleccionada en una tarjeta correcta se vea como una opción deshabilitada normal o no */
+/* Si quieres que la opción correcta en una tarjeta ya respondida se vea con el estilo 'selected' PERO no interactuable, esta regla la anularía. */
+/* Si la mantienes, la opción correcta se verá deshabilitada y grisácea. Si la comentas/eliminas, se verá azulada y deshabilitada. */
+.card-container.disabled .answer-option.selected {
+     background-color: #e0e0e0 !important; /* Usa !important si es necesario anular la regla .answer-option.selected */
+     border-color: #ccc !important;
+     font-weight: normal !important;
+}
+/* Si prefieres que la opción correcta en una tarjeta respondida se vea AZUL PERO NO INTERACTUABLE, comenta/elimina la regla anterior */
